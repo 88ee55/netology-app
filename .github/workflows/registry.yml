@@ -52,4 +52,4 @@ jobs:
         with:
           args: |
             helm repo add netology https://88ee55.github.io/netology-helm/
-            helm upgrade --install app -n app netology/myapp --wait --atomic --set image.tag=${{ steps.meta.outputs.labels."org.opencontainers.image.version" }}
+            helm upgrade --install app -n app netology/myapp --wait --atomic --set image.tag=${{ steps.meta.outputs.version }}
