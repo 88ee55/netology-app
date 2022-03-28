@@ -44,5 +44,11 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}
+      - name: deploy
+        uses: wahyd4/kubectl-helm-action@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: |
+            helm repo add netology https://88ee55.github.io/netology-helm/
+            helm upgrade --install app -n app netology/myapp --wait --atomic --set image.tag=${{ steps.meta.outputs.tags }}
