@@ -2,7 +2,6 @@ name: Build and Publish
 
 on:
   push:
-    tags: ['*']
 
 env:
   REGISTRY: ghcr.io
@@ -45,6 +44,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: deploy
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: wahyd4/kubectl-helm-action@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
@@ -52,4 +52,4 @@ jobs:
         with:
           args: |
             helm repo add netology https://88ee55.github.io/netology-helm/
-            helm upgrade --install app -n app netology/myapp --wait --atomic --set image.tag=${{ steps.meta.outputs.version }}
+            helm upgrade --install app -n app netology/myapp --wait --atomic --set image.tag=${{ steps.meta.outputs.version }} 
